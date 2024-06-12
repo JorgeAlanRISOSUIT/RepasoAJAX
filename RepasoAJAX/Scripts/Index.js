@@ -1,4 +1,8 @@
 ﻿$(document).ready(() => {
+    GetAll()
+})
+
+function GetAll() {
     $.ajax({
         url: "https://localhost:44372/Productos",
         contentType: 'application/json',
@@ -23,6 +27,40 @@
                                                 .on('click', (event) => {
                                                     event.preventDefault()
                                                     $('#Mensaje').modal('show')
+                                                    $('.modal-content').empty().prepend(
+                                                        $('<h6>').addClass('modal-header').text('¿Seguro que quieres eliminar este producto?')
+                                                    )
+                                                    $('.modal-content').append(
+                                                        $('<div>').addClass('modal-body').append(
+                                                            $('<div>').addClass('row jusitfy-content-center align-items-center').append(
+                                                                $('<label>').addClass('col-form-label').text('Nombre del producto'),
+                                                                $('<input type="text">').addClass('form-control').prop('disabled', true).val(value.Nombre),
+                                                                $('<label>').addClass('col-form-label').text('NumMaterial'),
+                                                                $('<input type="text">').addClass('form-control').prop('disabled', true).val(value.NumMateria),
+                                                                $('<label>').addClass('col-form-label').text('Seccion'),
+                                                                $('<input type="text">').addClass('form-control').prop('disabled', true).val(value.Categoria.Nombre),
+                                                                $('<label>').addClass('col-form-label').text('Area'),
+                                                                $('<input type="text">').addClass('form-control').prop('disabled', true).val(value.Categoria.Categoria.Nombre),
+                                                            )
+                                                        ),
+                                                        $('<div>').addClass('modal-footer').append(
+                                                            $('<button>').addClass('btn btn-secondary').attr("data-bs-dismiss", "modal").text('Cerrar'),
+                                                            $('<button>').addClass('btn btn-success').text('Aceptar').on('click', (event) => {
+                                                                $.ajax({
+                                                                    url: 'https://localhost:44372/EliminarPorProducto?idProducto=' + value.Sku,
+                                                                    method: 'DELETE',
+                                                                    dataType: 'application/json',
+                                                                    success: function (result) {
+                                                                        if (result.Success) {
+                                                                            GetAll()
+                                                                            $('#Mensaje').modal('hide')
+                                                                        }
+                                                                    },
+                                                                    error: {},
+                                                                })
+                                                            })
+                                                        )
+                                                    )
                                                 })
                                         )
                                     )
@@ -44,32 +82,4 @@
             )
         }
     })
-})
-
-$('#FormExcel').on('submit', (event) => {
-    debugger
-    event.preventDefault()
-    $.ajax({
-        url: 'https://localhost:44372/AgregarNuevaMercancia',
-        type: 'POST',
-        dataType: 'JSON',
-        contentType: false,
-        processData: false,
-        cache: false,
-        xhr: function () {
-            var myXhr = $.ajaxSettings.xhr();
-            console.log(myXhr)
-        },
-        success: function (result) {
-
-        },
-        error: function (result) {
-
-        },
-        statusCode: {
-            400: function (error) {
-
-            }
-        }
-    })
-})
+}
