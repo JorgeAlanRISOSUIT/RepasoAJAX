@@ -20,6 +20,10 @@
                                         $('<div>').addClass('col-sm-12 d-flex justify-content-center align-items-center gap-1 flex-wrap').append(
                                             $('<a>').prop('id', 'Actualizar').prop('href', `/Producto/ObtenerProducto?idProducto=${value.Sku}`).addClass('btn btn-info col').text('Actualizar'),
                                             $('<a>').prop('id', 'Eliminar').prop('href', `/Producto/EliminarProducto?idProducto=${value.Sku}`).addClass('btn btn-danger col').text('Eliminar')
+                                                .on('click', (event) => {
+                                                    event.preventDefault()
+                                                    $('#Mensaje').modal('show')
+                                                })
                                         )
                                     )
                                 )
@@ -42,3 +46,30 @@
     })
 })
 
+$('#FormExcel').on('submit', (event) => {
+    debugger
+    event.preventDefault()
+    $.ajax({
+        url: 'https://localhost:44372/AgregarNuevaMercancia',
+        type: 'POST',
+        dataType: 'JSON',
+        contentType: false,
+        processData: false,
+        cache: false,
+        xhr: function () {
+            var myXhr = $.ajaxSettings.xhr();
+            console.log(myXhr)
+        },
+        success: function (result) {
+
+        },
+        error: function (result) {
+
+        },
+        statusCode: {
+            400: function (error) {
+
+            }
+        }
+    })
+})

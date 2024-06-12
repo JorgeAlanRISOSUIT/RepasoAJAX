@@ -53,14 +53,14 @@ namespace BL
                 return (false, ex.Message, ex, null);
             }
         }
-        public static (bool, string, Exception, ML.Producto) GetById(int idProducto) 
+        public static (bool, string, Exception, ML.Producto) GetById(int idProducto)
         {
             try
             {
                 using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
                 {
                     var producto = context.EscogerProducto(idProducto).SingleOrDefault();
-                    if(producto != null)
+                    if (producto != null)
                     {
                         ML.Producto objProducto = new ML.Producto
                         {
@@ -92,14 +92,14 @@ namespace BL
                 return (false, ex.Message, ex, null);
             }
         }
-        public static (bool, string, Exception) Update(ML.Producto producto) 
+        public static (bool, string, Exception) Update(ML.Producto producto)
         {
             try
             {
                 using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
                 {
                     int row = context.CambiarProducto(producto.Sku, producto.Nombre, producto.NumMateria, producto.Categoria.IdSubCategoria, producto.Inventario);
-                    if(row > 0)
+                    if (row > 0)
                     {
                         return (true, "Se ha modificato el producto", null);
                     }
@@ -114,14 +114,14 @@ namespace BL
                 return (false, ex.Message, ex);
             }
         }
-        public static (bool, string, Exception) Add(ML.Producto producto) 
+        public static (bool, string, Exception) Add(ML.Producto producto)
         {
             try
             {
                 using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
                 {
                     int row = context.VenderProducto(producto.Nombre, producto.NumMateria, producto.Categoria.IdSubCategoria, producto.Inventario);
-                    if(row > 0)
+                    if (row > 0)
                     {
                         return (true, $"se ha llenado el producto con el {producto.Nombre}", null);
                     }
@@ -136,14 +136,46 @@ namespace BL
                 return (false, ex.Message, ex);
             }
         }
-        public static (bool, string, Exception) Delete(int idProducto) 
+        public static (bool, string, Exception, ML.DTO.ErrorDTOExcel) AddList(List<ML.Producto> productos)
+        {
+            try
+            {
+                ML.DTO.ErrorDTOExcel modelError = new ML.DTO.ErrorDTOExcel();
+                using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
+                {
+                    foreach (var item in productos)
+                    {
+                        int row = context.VenderProducto(item.Nombre, item.NumMateria, item.Categoria.IdSubCategoria, item.Inventario);
+                        if (row <= 0)
+                        {
+                            ML.DTO.ErrorDTOExcel objExcel = new ML.DTO.ErrorDTOExcel() { Message = "Insercion fallida" };
+                            modelError.Errors.Add(objExcel);
+                        }
+                    }
+                    if (modelError.Errors.Count > 0)
+                    {
+                        return (false, "", null, modelError);
+                    }
+                    else
+                    {
+                        return (true, "", null, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, ex, null);
+            }
+
+        }
+        public static (bool, string, Exception) Delete(int idProducto)
         {
             try
             {
                 using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
                 {
                     int row = context.ElmiminarProducto(idProducto);
-                    if(row > 0)
+                    if (row > 0)
                     {
                         return (true, "", null);
                     }
