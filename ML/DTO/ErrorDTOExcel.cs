@@ -10,6 +10,7 @@ namespace ML.DTO
     public class ErrorDTOExcel
     {
         public string Message { get; set; }
+        public object Error { get; set; }
         public List<ErrorDTOExcel> Errors { get; set; } = new List<ErrorDTOExcel>();
     }
 }
