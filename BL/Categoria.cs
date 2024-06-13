@@ -36,5 +36,10 @@ namespace BL
                 return (true, ex.Message, ex);
             }
         }
+
+        public static (bool, string, Exception) GetAll()
+        {
+
+        }
     }
 }

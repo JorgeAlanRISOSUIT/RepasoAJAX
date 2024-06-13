@@ -36,5 +36,10 @@ namespace BL
 				return (false, ex.Message, ex);
 			}
         }
+
+		public static (bool, string, Exception, ML.Categoria) GetAllByCategoria(int idSubCategoria)
+		{
+
+		}
     }
 }

@@ -4,5 +4,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ObtenerProducto</h2>
-
+<div class="container-fluid">
+    <div class="p-3 row justify-content-center align-items-center">
+        @using (Html.BeginForm("ObtenerProducto", "Producto", FormMethod.Post, new { @id = "ActualizarForm", @class = "row g-3 w-50" }))
+        {
+            <div class="col-md">
+                <div class="form-floating">
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "" })
+                    @Html.LabelFor(model => model.Nombre, new { @class = "" })
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    @Html.TextBoxFor(model => model.NumMateria, new { @class = "form-control", @placeholder = "" })
+                    @Html.LabelFor(model => model.NumMateria, new { @class = "" })
+                </div>
+            </div>
+            <div class="col-md">
+                @Html.LabelFor(model => model.Categoria, new { @class = "col-form-label" })
+                @Html.TextBoxFor(model => model.Categoria, new { @class = "form-control", @placeholder = "" })
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    @Html.TextBoxFor(model => model.Inventario, new { @class = "form-control", @placeholder = "" })
+                    @Html.LabelFor(model => model.Inventario, new { @class = "" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
