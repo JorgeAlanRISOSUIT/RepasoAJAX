@@ -59,6 +59,7 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="NumMaterial" Type="varchar" Mode="In" />
           <Parameter Name="Seccion" Type="int" Mode="In" />
+          <Parameter Name="Area" Type="int" Mode="In" />
           <Parameter Name="Inventario" Type="int" Mode="In" />
         </Function>
         <Function Name="ElmiminarProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -67,7 +68,11 @@
         <Function Name="EscogerProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdProducto" Type="int" Mode="In" />
         </Function>
+        <Function Name="ListarLasCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="MostrarProductos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PorSubCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCategoria" Type="int" Mode="In" />
+        </Function>
         <Function Name="VenderProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="NumMaterial" Type="varchar" Mode="In" />
@@ -103,18 +108,11 @@
             <End Role="SubCategoria" EntitySet="SubCategorias" />
             <End Role="Producto" EntitySet="Productoes" />
           </AssociationSet>
-          <FunctionImport Name="CambiarProducto">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="NumMaterial" Mode="In" Type="String" />
-            <Parameter Name="Seccion" Mode="In" Type="Int32" />
-            <Parameter Name="Inventario" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="ElmiminarProducto">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EscogerProducto" ReturnType="Collection(JAEscobarRepasoAJAXModel.EscogerProducto_Result)">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="MostrarProductos" ReturnType="Collection(JAEscobarRepasoAJAXModel.MostrarProductos_Result)" />
           <FunctionImport Name="VenderProducto">
@@ -122,6 +120,18 @@
             <Parameter Name="NumMaterial" Mode="In" Type="String" />
             <Parameter Name="Seccion" Mode="In" Type="Int32" />
             <Parameter Name="Stock" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListarLasCategorias" ReturnType="Collection(JAEscobarRepasoAJAXModel.ListarLasCategorias_Result)" />
+          <FunctionImport Name="PorSubCategorias" ReturnType="Collection(JAEscobarRepasoAJAXModel.PorSubCategorias_Result)">
+          <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CambiarProducto">
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="NumMaterial" Mode="In" Type="String" />
+            <Parameter Name="Seccion" Mode="In" Type="Int32" />
+            <Parameter Name="Area" Mode="In" Type="Int32" />
+            <Parameter Name="Inventario" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Categoria">
@@ -197,6 +207,15 @@
           <Property Type="Int32" Name="IdCategoria" Nullable="false" />
           <Property Type="String" Name="Seccion" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="ListarLasCategorias_Result">
+          <Property Type="Int32" Name="IdCategoria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PorSubCategorias_Result">
+          <Property Type="Int32" Name="IdSubCategoria" Nullable="false" />
+          <Property Type="String" Name="Seccion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Area" Nullable="false" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -231,7 +250,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="CambiarProducto" FunctionName="JAEscobarRepasoAJAXModel.Store.CambiarProducto" />
           <FunctionImportMapping FunctionImportName="ElmiminarProducto" FunctionName="JAEscobarRepasoAJAXModel.Store.ElmiminarProducto" />
           <FunctionImportMapping FunctionImportName="EscogerProducto" FunctionName="JAEscobarRepasoAJAXModel.Store.EscogerProducto">
             <ResultMapping>
@@ -262,6 +280,24 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="VenderProducto" FunctionName="JAEscobarRepasoAJAXModel.Store.VenderProducto" />
+          <FunctionImportMapping FunctionImportName="ListarLasCategorias" FunctionName="JAEscobarRepasoAJAXModel.Store.ListarLasCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JAEscobarRepasoAJAXModel.ListarLasCategorias_Result">
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PorSubCategorias" FunctionName="JAEscobarRepasoAJAXModel.Store.PorSubCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JAEscobarRepasoAJAXModel.PorSubCategorias_Result">
+                <ScalarProperty Name="IdSubCategoria" ColumnName="IdSubCategoria" />
+                <ScalarProperty Name="Seccion" ColumnName="Seccion" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CambiarProducto" FunctionName="JAEscobarRepasoAJAXModel.Store.CambiarProducto" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

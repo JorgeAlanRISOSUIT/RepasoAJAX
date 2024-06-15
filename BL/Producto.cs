@@ -66,7 +66,7 @@ namespace BL
                         {
                             Sku = producto.Sku,
                             Nombre = producto.Producto,
-                            NumMateria = producto.Producto,
+                            NumMateria = producto.NumMaterial,
                             Categoria = new ML.SubCategoria
                             {
                                 IdSubCategoria = producto.IdSubCategoria,
@@ -98,7 +98,7 @@ namespace BL
             {
                 using (DL.JAEscobarRepasoAJAXEntities context = new DL.JAEscobarRepasoAJAXEntities())
                 {
-                    int row = context.CambiarProducto(producto.Sku, producto.Nombre, producto.NumMateria, producto.Categoria.IdSubCategoria, producto.Inventario);
+                    int row = context.CambiarProducto(producto.Sku, producto.Nombre, producto.NumMateria, producto.Categoria.IdSubCategoria, producto.Categoria.Categoria.IdCategoria, producto.Inventario);
                     if (row > 0)
                     {
                         return (true, "Se ha modificato el producto", null);

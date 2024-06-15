@@ -18,7 +18,8 @@ namespace RepasoAJAX
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/index.js"));
+                      "~/Scripts/index.js",
+                      "~/Scripts/Actualizar.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
