@@ -11,6 +11,6 @@ namespace ML
         public int IdSubCategoria { get; set; }
         public string Nombre { get; set; }
         public Categoria Categoria { get; set; }
-        public List<Categoria> Categorias { get; set; }
+        public List<ML.SubCategoria> Categorias { get; set; }
     }
 }

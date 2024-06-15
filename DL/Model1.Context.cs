@@ -31,31 +31,6 @@ namespace DL
         public virtual DbSet<Producto> Productoes { get; set; }
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
     
-        public virtual int CambiarProducto(Nullable<int> idProducto, string nombre, string numMaterial, Nullable<int> seccion, Nullable<int> inventario)
-        {
-            var idProductoParameter = idProducto.HasValue ?
-                new ObjectParameter("IdProducto", idProducto) :
-                new ObjectParameter("IdProducto", typeof(int));
-    
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("Nombre", nombre) :
-                new ObjectParameter("Nombre", typeof(string));
-    
-            var numMaterialParameter = numMaterial != null ?
-                new ObjectParameter("NumMaterial", numMaterial) :
-                new ObjectParameter("NumMaterial", typeof(string));
-    
-            var seccionParameter = seccion.HasValue ?
-                new ObjectParameter("Seccion", seccion) :
-                new ObjectParameter("Seccion", typeof(int));
-    
-            var inventarioParameter = inventario.HasValue ?
-                new ObjectParameter("Inventario", inventario) :
-                new ObjectParameter("Inventario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CambiarProducto", idProductoParameter, nombreParameter, numMaterialParameter, seccionParameter, inventarioParameter);
-        }
-    
         public virtual int ElmiminarProducto(Nullable<int> idProducto)
         {
             var idProductoParameter = idProducto.HasValue ?
@@ -98,6 +73,49 @@ namespace DL
                 new ObjectParameter("Stock", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("VenderProducto", nombreParameter, numMaterialParameter, seccionParameter, stockParameter);
+        }
+    
+        public virtual ObjectResult<ListarLasCategorias_Result> ListarLasCategorias()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ListarLasCategorias_Result>("ListarLasCategorias");
+        }
+    
+        public virtual ObjectResult<PorSubCategorias_Result> PorSubCategorias(Nullable<int> idCategoria)
+        {
+            var idCategoriaParameter = idCategoria.HasValue ?
+                new ObjectParameter("IdCategoria", idCategoria) :
+                new ObjectParameter("IdCategoria", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PorSubCategorias_Result>("PorSubCategorias", idCategoriaParameter);
+        }
+    
+        public virtual int CambiarProducto(Nullable<int> idProducto, string nombre, string numMaterial, Nullable<int> seccion, Nullable<int> area, Nullable<int> inventario)
+        {
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var numMaterialParameter = numMaterial != null ?
+                new ObjectParameter("NumMaterial", numMaterial) :
+                new ObjectParameter("NumMaterial", typeof(string));
+    
+            var seccionParameter = seccion.HasValue ?
+                new ObjectParameter("Seccion", seccion) :
+                new ObjectParameter("Seccion", typeof(int));
+    
+            var areaParameter = area.HasValue ?
+                new ObjectParameter("Area", area) :
+                new ObjectParameter("Area", typeof(int));
+    
+            var inventarioParameter = inventario.HasValue ?
+                new ObjectParameter("Inventario", inventario) :
+                new ObjectParameter("Inventario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CambiarProducto", idProductoParameter, nombreParameter, numMaterialParameter, seccionParameter, areaParameter, inventarioParameter);
         }
     }
 }

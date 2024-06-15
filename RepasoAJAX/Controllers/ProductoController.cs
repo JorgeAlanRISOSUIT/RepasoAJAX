@@ -9,14 +9,18 @@ namespace RepasoAJAX.Controllers
     public class ProductoController : Controller
     {
         // GET: Producto
-        public ActionResult ObtenerProducto(int idProducto)
+        public ActionResult ObtenerProducto(int? idProducto)
         {
-            if (idProducto > 0)
+            if (idProducto.GetValueOrDefault(0) > 0)
             {
-                var result = BL.Producto.GetById(idProducto);
+                var result = BL.Producto.GetById(idProducto.Value);
                 if (result.Item1)
                 {
-                    var model = result.Item4;
+                    ML.Producto model = result.Item4;
+                    var resultCategoria = BL.Categoria.GetAll();
+                    var resultSubCategoria = BL.SubCategoria.GetAllByCategoria(model.Categoria.Categoria.IdCategoria);
+                    model.Categoria.Categoria.Categorias = resultCategoria.Item1 ? resultCategoria.Item4.Categorias : new List<ML.Categoria>();
+                    model.Categoria.Categorias = resultSubCategoria.Item1 ? resultSubCategoria.Item4.Categorias: new List<ML.SubCategoria>();
                     return View(model);
                 }
                 else
@@ -26,9 +30,13 @@ namespace RepasoAJAX.Controllers
             }
             else
             {
-                ML.Producto model = new ML.Producto();
-                model.Productos = new List<ML.Producto>();
-                return View(model);
+                ML.Producto producto = new ML.Producto();
+                var resultCategoria = BL.Categoria.GetAll();
+                producto.Categoria = new ML.SubCategoria();
+                producto.Categoria.Categorias = new List<ML.SubCategoria>();
+                producto.Categoria.Categoria = new ML.Categoria();
+                producto.Categoria.Categoria.Categorias = resultCategoria.Item1 ? resultCategoria.Item4.Categorias : new List<ML.Categoria>();
+                return View(producto);
             }
         }
     }

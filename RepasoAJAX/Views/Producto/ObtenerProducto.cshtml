@@ -8,29 +8,77 @@
     <div class="p-3 row justify-content-center align-items-center">
         @using (Html.BeginForm("ObtenerProducto", "Producto", FormMethod.Post, new { @id = "ActualizarForm", @class = "row g-3 w-50" }))
         {
-            <div class="col-md">
+            @Html.HiddenFor(model => model.Sku)
+            <div class="col-md-auto">
                 <div class="form-floating">
                     @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "" })
                     @Html.LabelFor(model => model.Nombre, new { @class = "" })
                 </div>
             </div>
-            <div class="col-md">
+            <div class="col-md-auto">
                 <div class="form-floating">
                     @Html.TextBoxFor(model => model.NumMateria, new { @class = "form-control", @placeholder = "" })
                     @Html.LabelFor(model => model.NumMateria, new { @class = "" })
                 </div>
             </div>
-            <div class="col-md">
-                @Html.LabelFor(model => model.Categoria, new { @class = "col-form-label" })
-                @Html.TextBoxFor(model => model.Categoria, new { @class = "form-control", @placeholder = "" })
+            <div class="col-md-auto">
+                <div class="input-group my-3">
+                    @Html.LabelFor(model => model.Categoria.Categoria, new { @class = "input-group-text" })
+                    @Html.DropDownListFor(model => model.Categoria.Categoria.IdCategoria, new SelectList(Model.Categoria.Categoria.Categorias, "IdCategoria", "Nombre", Model.Categoria.Categoria.IdCategoria), "Seleccione el area del producto", new { @class = "form-control", @id = "DDLCategoria" })
+                </div>
             </div>
-            <div class="col-md">
+            <div class="col-md-auto">
+                <div class="input-group my-3">
+                    @Html.LabelFor(model => model.Categoria, new { @class = "input-group-text" })
+                    @if (Model.Categoria.IdSubCategoria > 0)
+                    {
+                        @Html.DropDownListFor(model => model.Categoria.IdSubCategoria, new SelectList(Model.Categoria.Categorias, "IdSubCategoria", "Nombre", Model.Categoria.IdSubCategoria), "Seleccione una seccion", new { @class = "form-control", @id = "DDLSubCategoria" })
+                    }
+                    else
+                    {
+                        @Html.DropDownList("Categoria.IdSubCategoria", new SelectList(Model.Categoria.Categorias), "Seleccione una seccion", new { @class = "form-control", @id = "DDLSubCategoria" })
+                    }
+                </div>
+            </div>
+            <div class="col-md-auto">
                 <div class="form-floating">
                     @Html.TextBoxFor(model => model.Inventario, new { @class = "form-control", @placeholder = "" })
                     @Html.LabelFor(model => model.Inventario, new { @class = "" })
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <img id="imgProducto" src="~/Content/Assets/question.jpg" class="img-fluid rounded mx-auto d-block" />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <input class="form-control w-100" type="file" id="ArchivoImg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn btn-info col" data-bs-toggle="modal" data-bs-target="#exampleModal" name="imgProducto">Ingresar nuevo producto</button>
+            </div>
         }
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
 </div>
 @Scripts.Render("~/bundles/jquery")
